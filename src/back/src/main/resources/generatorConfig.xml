@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+  <context id="context1">
+
+    <commentGenerator>
+      <property name="suppressAllComments" value="true" />
+    </commentGenerator>
+
+    <jdbcConnection connectionURL="jdbc:mysql://localhost:3306/jen_code"
+      driverClass="com.mysql.jdbc.Driver" password="jen_code_pass"
+      userId="jen_code_rw" />
+
+    <javaModelGenerator targetPackage="com.github.holyloop.jencode.model"
+      targetProject="jen-code/src/main/java" />
+
+    <sqlMapGenerator targetPackage="com.github.holyloop.jencode.mapper"
+      targetProject="jen-code/src/main/java" />
+
+    <javaClientGenerator targetPackage="com.github.holyloop.jencode.dao"
+      targetProject="jen-code/src/main/java" type="XMLMAPPER" />
+
+    <table schema="jen_code" tableName="project"></table>
+    <table schema="jen_code" tableName="project_db"></table>
+    <table schema="jen_code" tableName="project_db_table"></table>
+
+  </context>
+</generatorConfiguration>
