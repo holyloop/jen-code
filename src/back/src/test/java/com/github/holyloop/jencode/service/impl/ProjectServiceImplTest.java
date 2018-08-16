@@ -19,6 +19,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -41,11 +42,11 @@ public class ProjectServiceImplTest {
 
     @Test
     @Transactional
-    @Rollback(value = true)
+    @Rollback
     public void testAddProjectBasic() {
         try {
             projectService.addProject(null);
-            fail("show have thrown BusinessException");
+            fail("should have thrown BusinessException");
         } catch (IllegalArgumentException e) {
             assertTrue(true);
         }
@@ -65,7 +66,7 @@ public class ProjectServiceImplTest {
 
     @Test
     @Transactional
-    @Rollback(value = true)
+    @Rollback
     public void testAddProjectDuplicated() {
         String duplicatedTitle = "title";
         String nonDuplicatedTitle = "title1";
@@ -82,7 +83,7 @@ public class ProjectServiceImplTest {
         insertDto.setTitle(duplicatedTitle);
         try {
             projectService.addProject(insertDto);
-            fail("show have thrown BusinessException");
+            fail("should have thrown BusinessException");
         } catch (BusinessException e) {
             assertTrue(true);
         }
@@ -95,14 +96,14 @@ public class ProjectServiceImplTest {
     public void testUpdateProjectExcept() {
         try {
             projectService.updateProject(null);
-            fail("show have thrown BusinessException");
+            fail("should have thrown BusinessException");
         } catch (IllegalArgumentException e) {
             assertTrue(true);
         }
 
         try {
             projectService.updateProject(new ProjectUpdateDto());
-            fail("show have thrown BusinessException");
+            fail("should have thrown BusinessException");
         } catch (IllegalArgumentException e) {
             assertTrue(true);
         }
@@ -110,7 +111,7 @@ public class ProjectServiceImplTest {
 
     @Test
     @Transactional
-    @Rollback(value = true)
+    @Rollback
     public void testUpdateProject() {
         Project entity = new Project();
         entity.setAuthor("author");
@@ -132,15 +133,18 @@ public class ProjectServiceImplTest {
 
     @Test
     @Transactional
-    @Rollback(value = true)
+    @Rollback
     public void testDeleteProjects() {
+        List<Long> toDelIds = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             Project project = new Project();
             project.setTitle("title" + i);
             projectMapper.insertSelective(project);
+            if (i % 2 == 0) {
+                toDelIds.add(project.getId());
+            }
         }
 
-        List<Long> toDelIds = Arrays.asList(9L, 2L, 5L, 7L);
         projectService.deleteProjects(toDelIds);
 
         ProjectExample deletedExample = new ProjectExample();
